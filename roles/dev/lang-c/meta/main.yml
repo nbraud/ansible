@@ -1,0 +1,16 @@
+galaxy_info:
+  author: Nicolas Braud-Santoni
+  description: Setups a C development environment
+  license: ISC
+
+  min_ansible_version: 2.0
+
+  platforms:
+  - name: Debian
+    versions: [ all ]
+
+  galaxy_tags:
+    - devel
+    - user
+
+dependencies: []

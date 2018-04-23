@@ -1,0 +1,19 @@
+---
+- name: Install required packages
+  apt:
+    name:
+      - gcc
+      - gdb
+      - g++
+      - libc6-dev
+      - make
+      - cmake
+      - cmake-curses-gui
+      - pkgconf
+      - strace
+      - valgrind
+      - clang
+      - clang-format
+      - clang-tidy
+
+  become: yes
