@@ -1,0 +1,6 @@
+---
+- name: Install required packages
+  become: yes
+  pkgng:
+    name: etckeeper
+    state: present

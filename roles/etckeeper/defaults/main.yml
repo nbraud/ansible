@@ -1,0 +1,3 @@
+---
+# defaults file for nbraud.etckeeper
+etckeeper__sudo_group: sudo

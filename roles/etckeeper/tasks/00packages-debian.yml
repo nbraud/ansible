@@ -1,0 +1,6 @@
+---
+- name: Install required packages
+  become: yes
+  apt:
+    name: etckeeper
+    state: present

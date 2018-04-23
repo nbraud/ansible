@@ -1,0 +1,3 @@
+- name: Commit /etc changes
+  become: yes
+  command: etckeeper commit -m 'sudo and ZSH integration for etckeeper'

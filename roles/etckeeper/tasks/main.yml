@@ -1,0 +1,48 @@
+---
+- include_tasks: "{{ item }}"
+  with_first_found:
+    - 00packages-{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml
+    - 00packages-{{ ansible_distribution | lower }}-{{ ansible_distribution_release | lower }}.yml
+    - 00packages-{{ ansible_distribution | lower }}.yml
+    - 00packages-fail.yml
+  when: dotfiles__install_packages or dotfiles__install_extra_packages
+
+- name: Assert /etc is clean
+  become: yes
+  shell: '! etckeeper unclean'
+
+- name: Add sudoers file for etckeeper
+  become: yes
+  notify: Commit /etc changes
+  copy:
+    dest: /etc/sudoers.d/etckeeper
+    content: >-
+      Cmnd_Alias ETCKEEPER = /usr/bin/etckeeper vcs log, /usr/bin/etckeeper vcs diff, /usr/bin/etckeeper vcs status, /usr/bin/etckeeper unclean
+      
+      %{{ etckeeper__sudo_group }} ALL = NOPASSWD: ETCKEEPER
+
+- name: Add logout script for ZSH
+  become: yes
+  notify: Commit /etc changes
+  copy:
+    dest: /etc/zsh/zlogout
+    mode: 0o755
+    content: |-
+      #!/usr/bin/env zsh
+      if command -v etckeeper &>/dev/null; then
+      	local IFS=' '
+      	local groups=($(id -Gn))
+      
+      	# If the user is in group {{ etckeeper__sudo_group }}
+      	if [[ ${groups[(i){{ etckeeper__sudo_group }}]} -le {{ "${#groups}" }} ]]; then
+      		if sudo etckeeper unclean; then
+      			cat <<-EOF
+      				Some config changes were not commited:
+      				$(sudo etckeeper vcs status)
+      
+      				Last connections are:
+      				$(last -5)
+      				EOF
+      		fi
+      	fi
+      fi
