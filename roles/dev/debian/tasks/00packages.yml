@@ -4,7 +4,6 @@
     state: present
     name:
       - apt-cacher-ng
-      - build-essential
       - check-all-the-things
       - debian-keyring
       - debootstrap
@@ -14,7 +13,6 @@
       - dpkg-dev-el
       - git
       - git-buildpackage
-      - git-dpm
       - gnupg2
       - libconfig-model-dpkg-perl  # Provides scan-copyrights
       - libdistro-info-perl
