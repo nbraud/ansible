@@ -60,7 +60,6 @@
         - /etc/passwd
         - /etc/hosts
         - /etc/resolv.conf
-        - /proc/cpuinfo
 
     - name: "schroot : Create tmpfs for overlays"
       mount:
