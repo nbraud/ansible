@@ -6,6 +6,7 @@
         mode: 02775
         owner: root
         group: sbuild
+        state: directory
 
     - name: "schroot : Make sure buildarea/Packages exists"
       copy:
