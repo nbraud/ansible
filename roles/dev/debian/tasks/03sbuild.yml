@@ -87,6 +87,7 @@
           {% if item.aliases is defined %}
           aliases={{ item.aliases | join(',') }}
           {% endif %}
+
           {% endfor %}
 
     - name: "schroot : Update apt cache"
