@@ -3,6 +3,7 @@
   apt:
     state: present
     name:
+      - adequate
       - apt-cacher-ng
       - check-all-the-things
       - debian-keyring
@@ -11,6 +12,7 @@
       - dh-cargo
       - dose-extra
       - dpkg-dev-el
+      - freight
       - git
       - git-buildpackage
       - gnupg2

@@ -8,6 +8,7 @@
     builder: sbuild -v --no-clean-source
     export-dir: "{{ debian__path }}/buildarea"
     postbuild: "cd {{ debian__path }}/buildarea && apt-ftparchive packages . > Packages"
+    dist: DEP14
   loop_control:
     label: "{{ item.key }}"
 
@@ -25,12 +26,12 @@
   loop_control:
     label: "{{ item.key }}"
 
-- name: "Tools : Configure sbuild"
+- name: "Tools : Configure sbuild (1/2)"
   become: yes
   lineinfile:
     path: /etc/sbuild/sbuild.conf
     line: "${{ item.key }} = {{ item.value | tojson }};"
-    regexp: '^#?\${{ item.key }}'
+    regexp: '^#?\${{ item.key }} *='
     insertbefore: '^1;'
   loop_control:
     label: "{{ item.key }}"
@@ -41,9 +42,6 @@
     # Pull packages from the buildarea
     extra_repositories: [ 'deb [trusted=yes] file://{{ debian__path }}/buildarea ./' ]
 
-    # Build options
-    distribution: unstable
-
     # Avoid purging the build directory and dependencies,
     # as they will be removed on session exit anyhow
     purge_build_directory: never
@@ -53,7 +51,32 @@
     # will progressively consume all the memory.
     purge_session: always
 
+    # Always build source-only uploads
+    # Remember to use the binary upload for packages that will land in NEW
+    build_source: 1
+    source_only_changes: 1
+
     # QA tools
     ## Lintian
     run_lintian: 1
     lintian_opts: [ -i, -I ]
+
+    ## Piuparts
+    run_piuparts: 0
+    piuparts_opts:
+      - --schroot=sid-amd64-piuparts
+      - --log-level=info
+      - --distupgrade-to-testdebs
+      - --fail-if-inadequate
+      - --fail-on-broken-symlinks
+      - --ignore-regex=/opt/deb/buildarea/
+      - --ignore-regex=/var/lib/adequate/
+
+- name: "Tools : Configure sbuild (2/2)"
+  become: yes
+  lineinfile:
+    path: /etc/sbuild/sbuild.conf
+    regexp: '^\${{ item }}'
+    state: absent
+  with_items:
+    - distribution

@@ -4,16 +4,37 @@ debian__zfs_dataset: deb
 
 debian__path:  /opt/deb
 debian__overlay_path: /var/lib/schroot/union/overlay
-debian__extra_pkgs: [ lintian ]
+debian__extra_pkgs: [ ]
 debian__schroots:
   - suite: sid
     aliases: [ unstable-amd64-sbuild ]
-  - name: debcargo
+    extra_pkgs: [ lintian ]
+
+  - suite: stretch
+    aliases:
+      - stretch-proposed-updates-amd64-sbuild
+      - stretch-security-amd64-sbuild
+    extra_pkgs: [ lintian ]
+
+  - suite: stretch
+    name: stretch-backports-amd64-sbuild
+    extra_repos:
+      - deb http://localhost:3142/debian stretch-backports main
+    default_release: stretch-backports
+    extra_pkgs: [ lintian ]
+
+  - name: sid-amd64-debcargo
     suite: sid
-    extra_pkgs: [ cargo, dh-cargo ]
-# - suite: stretch
-#   aliases: [ stable, stretch-backports ]
+    extra_pkgs: [ cargo, dh-cargo, lintian ]
+
+  - name: sid-amd64-piuparts
+    suite: sid
+    extra_pkgs: [ adequate ]
+
+#  - suite: stretch
+#    aliases: [ stable, stretch-proposed-updates ]
+#  - suite: stretch-backports
 
 
 # Dirty hack  :/
-item_name: "{{ item.name | default( item.suite) }}"
+item_name: "{{ item.name | default(item.suite + '-amd64-sbuild') }}"

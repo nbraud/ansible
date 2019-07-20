@@ -1,8 +1,16 @@
-- name: Create required directories
+- name: Create required directories [1/2]
   become: yes
   file:
     path: "{{ debian__path }}/{{ item }}"
     state: directory
   with_items:
     - [ buildarea, schroot, cache ]
-    - "{{ debian__schroots | map(attribute='suite') | map('regex_replace', '^', 'schroot/') | list }}"
+
+- name: Create required directories [2/2]
+  become: yes
+  file:
+    path: "{{ debian__path }}/schroot/{{ item_name }}"
+    state: directory
+  with_items: "{{ debian__schroots }}"
+  loop_control:
+    label: "{{ item_name }}"

@@ -8,4 +8,5 @@
 
 - import_tasks: 02aptcacher.yml
 - import_tasks: 03sbuild.yml
+#- import_tasks: 03freight.yml
 - import_tasks: 04tools.yml
