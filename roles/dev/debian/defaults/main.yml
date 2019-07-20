@@ -23,6 +23,19 @@ debian__schroots:
     default_release: stretch-backports
     extra_pkgs: [ lintian ]
 
+  - suite: buster
+    aliases:
+      - buster-proposed-updates-amd64-sbuild
+      - buster-security-amd64-sbuild
+    extra_pkgs: [ lintian ]
+
+  - suite: buster
+    name: buster-backports-amd64-sbuild
+    extra_repos:
+      - deb http://localhost:3142/debian buster-backports main
+    default_release: buster-backports
+    extra_pkgs: [ lintian ]
+
   - name: sid-amd64-debcargo
     suite: sid
     extra_pkgs: [ cargo, dh-cargo, lintian ]
@@ -30,10 +43,6 @@ debian__schroots:
   - name: sid-amd64-piuparts
     suite: sid
     extra_pkgs: [ adequate ]
-
-#  - suite: stretch
-#    aliases: [ stable, stretch-proposed-updates ]
-#  - suite: stretch-backports
 
 
 # Dirty hack  :/
