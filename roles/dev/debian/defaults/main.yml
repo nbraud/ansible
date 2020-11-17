@@ -44,6 +44,13 @@ debian__schroots:
     suite: sid
     extra_pkgs: [ adequate ]
 
+  - suite: sid
+    name: experimental-amd64-sbuild
+    extra_repos:
+      - deb http://localhost:3142/debian experimental main
+    default_release: experimental
+    extra_pkgs: [ lintian ]
+
 
 # Dirty hack  :/
 item_name: "{{ item.name | default(item.suite + '-amd64-sbuild') }}"
